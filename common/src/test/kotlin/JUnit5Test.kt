@@ -3,9 +3,10 @@ package com.crypto.cryptoexchange.common
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class FirstTest {
+class JUnit5Test {
+
     @Test
     fun firstTest() {
-        assertEquals(1, 2 - 1)
+        assertEquals(3, 2 + 1)
     }
 }
