@@ -7,3 +7,5 @@
 | ФНС              | regulator  | regulator  | middle    | low      | payment of taxes                                                                                                                  | https://www.nalog.gov.ru/ | quarterly         |                                          |
 | Some cloud       | provider   | provider   | low       |          | payment of bills                                                                                                                  |                           |                   |                                          |
 | Binance          | competitor | competitor | high      | middle   | market capture                                                                                                                    | https://www.binance.com   |                   |                                          |
+
+// TODO: divide Dmitriev Dmitrii into roles
