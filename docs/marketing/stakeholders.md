@@ -1,0 +1,11 @@
+# Stakeholders list
+
+| Name             | Role       | Category   | Influence | Interest | Interests                                                                                                                         | Contacts                  | Contact frequency | Additionally                             |
+|------------------|------------|------------|-----------|----------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------|-------------------|------------------------------------------|
+| Dmitriev Dmitrii | owner      | internal   | high      | high     | development, architecture, terms, project status, deadlines, problems, budget, expenses, payback, salary, marketing, requirements | telegram: @vir2al8        | daily             |                                          |
+| ФСТЭК            | regulator  | regulator  | middle    | low      | date protection                                                                                                                   | https://fstec.ru/         |                   | Register as a distributor of information |
+| ФНС              | regulator  | regulator  | middle    | low      | payment of taxes                                                                                                                  | https://www.nalog.gov.ru/ | quarterly         |                                          |
+| Some cloud       | provider   | provider   | low       |          | payment of bills                                                                                                                  |                           |                   |                                          |
+| Binance          | competitor | competitor | high      | middle   | market capture                                                                                                                    | https://www.binance.com   |                   |                                          |
+
+// TODO: divide Dmitriev Dmitrii into roles
