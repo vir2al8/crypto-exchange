@@ -1,0 +1,236 @@
+openapi: 3.0.4
+info:
+  title: Crypto exchange
+  description: This is a project that allows customers to trade cryptocurrencies or digital currencies for other assets, such as conventional fiat money or other digital currencies
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:7101/api/v1
+tags:
+  - name: transaction
+    description: Транзакция
+paths:
+  /transaction/read:
+    post:
+      tags:
+        - transaction
+      summary: Read transaction
+      operationId: transactionRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionReadRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionReadResponse'
+  /transaction/search:
+    post:
+      tags:
+        - transaction
+      summary: Search transaction
+      operationId: transactionSearch
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionSearchRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionSearchResponse'
+components:
+  schemas:
+
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+      discriminator:
+        propertyName: requestType
+        mapping:
+          read:   '#/components/schemas/TransactionReadRequest'
+          search: '#/components/schemas/TransactionSearchRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          read:   '#/components/schemas/TransactionReadResponse'
+          search: '#/components/schemas/TransactionSearchRequest'
+          init: '#/components/schemas/TransactionInitResponse'
+
+    TransactionId:
+      type: string
+      description: Идентификатор кошелька
+
+#    BaseTransaction:
+#      type: object
+#      description: Объект описывает свойства для update
+#      properties:
+#        amount:
+#          type: number
+#          description: счет
+
+    TransactionInitResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+
+    TransactionReadObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/TransactionId'
+
+    TransactionReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/TransactionRequestDebug'
+        - type: object
+          properties:
+            transaction:
+              $ref: '#/components/schemas/TransactionReadObject'
+
+    TransactionResponseObject:
+      allOf:
+#        - $ref: '#/components/schemas/BaseTransaction'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/TransactionId'
+            buyOrderId:
+              $ref: './order-v1.yml/#/components/schemas/OrderId'
+            sellOrderId:
+              $ref: './order-v1.yml/#/components/schemas/OrderId'
+            createdAt:
+              type: string
+
+    TransactionResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом
+          properties:
+            transaction:
+              $ref: '#/components/schemas/TransactionResponseObject'
+
+    TransactionResponseMulti:
+      allOf:
+        - type: object
+          description: Список найденных объектов
+          properties:
+            transactions:
+              type: array
+              items:
+                $ref: '#/components/schemas/TransactionResponseObject'
+
+    TransactionReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/TransactionResponseSingle'
+
+    TransactionSearchFilter:
+      type: object
+      description: Набор фильтров для поиска
+      properties:
+        userId:
+          $ref: './user-v1.yml/#/components/schemas/UserId'
+
+    TransactionSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/TransactionRequestDebug'
+        - type: object
+          properties:
+            transactionFilter:
+              $ref: '#/components/schemas/TransactionSearchFilter'
+
+    TransactionSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/TransactionResponseMulti'
+
+    # STUBS ======================
+    TransactionRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    TransactionRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/TransactionDebug'
+
+    TransactionDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/TransactionRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/TransactionRequestDebugStubs'
+
+    TransactionRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badId

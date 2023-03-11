@@ -23,13 +23,13 @@ subprojects {
     }
 }
 
-detekt {
-    source = files("common")
-    buildUponDefaultConfig = true // preconfigure defaults
-    allRules = false // activate all available (even unstable) rules.
-    config = files("$projectDir/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
-//    baseline = file("$projectDir/baseline.xml") // a way of suppressing issues before introducing detekt
-}
+//detekt {
+//    source = files("common")
+//    buildUponDefaultConfig = true // preconfigure defaults
+//    allRules = false // activate all available (even unstable) rules.
+//    config = files("$projectDir/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
+////    baseline = file("$projectDir/baseline.xml") // a way of suppressing issues before introducing detekt
+//}
 
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
     jvmTarget = "17"

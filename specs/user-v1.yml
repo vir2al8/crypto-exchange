@@ -1,0 +1,316 @@
+openapi: 3.0.4
+info:
+  title: Crypto exchange
+  description: This is a project that allows customers to trade cryptocurrencies or digital currencies for other assets, such as conventional fiat money or other digital currencies
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:7101/api/v1
+tags:
+  - name: user
+    description: Пользователь
+paths:
+  /user/create:
+    post:
+      tags:
+        - user
+      summary: Create user
+      operationId: userCreate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreateResponse'
+  /user/read:
+    post:
+      tags:
+        - user
+      summary: Read user
+      operationId: userRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserReadRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserReadResponse'
+  /user/update:
+    post:
+      tags:
+        - user
+      summary: Update user
+      operationId: userUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdateResponse'
+  /user/delete:
+    post:
+      tags:
+        - user
+      summary: Delete user
+      operationId: userDelete
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDeleteRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDeleteResponse'
+
+components:
+  schemas:
+
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/UserCreateRequest'
+          read:   '#/components/schemas/UserReadRequest'
+          update: '#/components/schemas/UserUpdateRequest'
+          delete: '#/components/schemas/UserDeleteRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/UserCreateResponse'
+          read:   '#/components/schemas/UserReadResponse'
+          update: '#/components/schemas/UserUpdateResponse'
+          delete: '#/components/schemas/UserDeleteResponse'
+          init: '#/components/schemas/UserInitResponse'
+
+    UserId:
+      type: string
+      description: Идентификатор пользователя
+
+    BaseUser:
+      type: object
+      description: Объект описывает свойства, одинаковые для create и update
+      properties:
+        firstName:
+          type: string
+          description: Имя
+        secondName:
+          type: string
+          description: Фамилия
+        middleName:
+          type: string
+          description: Отчество
+
+    UserInitResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+
+    UserCreateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseUser'
+
+    UserCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/UserRequestDebug'
+        - type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/UserCreateObject'
+
+    UserReadObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UserId'
+
+    UserReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/UserRequestDebug'
+        - type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/UserReadObject'
+
+    UserUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseUser'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UserId'
+
+    UserUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/UserRequestDebug'
+        - type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/UserUpdateObject'
+
+    UserDeleteObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UserId'
+
+    UserDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/UserRequestDebug'
+        - type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/UserDeleteObject'
+
+    UserResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseUser'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/UserId'
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+
+    UserResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом
+          properties:
+            user:
+              $ref: '#/components/schemas/UserResponseObject'
+
+    UserCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/UserResponseSingle'
+
+    UserReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/UserResponseSingle'
+
+    UserUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/UserResponseSingle'
+
+    UserDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/UserResponseSingle'
+
+    # STUBS ======================
+    UserRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    UserRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/UserDebug'
+
+    UserDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/UserRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/UserRequestDebugStubs'
+
+    UserRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badId
+        - cannotDelete
