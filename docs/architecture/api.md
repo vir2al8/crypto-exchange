@@ -2,50 +2,20 @@
 
 ## Функции (endpoints)
 
-1. create, read, update, delete для криптовалют
-2. read, update для кошелька
-3. create, read, delete(?) для транзакций
-4. create, read, update, delete для ордеров
-5. create, update, delete для пользователей
+1. create, read, search, update, delete для валют
+2. read, search, update для кошелька
+3. create, read, update, delete для пользователей
+4. read, search для транзакций
+5. create, read, search, delete для ордеров
 
-## Описание сущности crypto
-
-1. id
-2. fullName
-3. name
-4. description
-5. capitalization
-6. numberOfCoins
-
-## Описание сущности transaction
-
-1. id
-2. orderId
-3. createdAt
-4. updatedAt
-5. capitalization
-
-## Описание сущности fiatCurrency
+## Описание сущности currency
 
 1. id
 2. fullName
 3. name
 4. description
-5. rates
-
-## Описание сущности order
-
-1. id
-2. purchaseCurrency (BTC, USDT)
-3. userId (buyer)
-4. userId (salesman)
-5. OrderType: market/limit
-6. OperationType: purchase/sale
-7. count
-8. price (limit or current currency)
-9. status: open/closed
-10. createdAt
-11. updatedAt
+5. type
+6. created_at
 
 ## Описание сущности user
 
@@ -53,11 +23,34 @@
 2. firstName
 3. secondName
 4. middleName
-5. walletId
+5. created_at
+6. updated_at
 
 ## Описание сущности wallet
 
 1. id
-2. currency (maybe only one currency)
-3. blocked (maybe delete it)
+2. currencyId
+3. userId
 4. amount
+5. created_at
+6. updated_at
+
+## Описание сущности order
+
+1. id
+2. walletId
+3. userId
+4. Type: market/limit
+5. Operation: purchase/sale
+6. amount
+7. status: open/closed
+8. createdAt
+9. updatedAt
+
+
+## Описание сущности transaction
+
+1. id
+2. buyOrderId
+3. sellOrderId
+4. createdAt

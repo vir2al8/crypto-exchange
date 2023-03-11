@@ -1,0 +1,287 @@
+openapi: 3.0.4
+info:
+  title: Crypto exchange
+  description: This is a project that allows customers to trade cryptocurrencies or digital currencies for other assets, such as conventional fiat money or other digital currencies
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:7101/api/v1
+tags:
+  - name: wallet
+    description: Кошелек
+paths:
+  /wallet/read:
+    post:
+      tags:
+        - wallet
+      summary: Read wallet
+      operationId: walletRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletReadRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletReadResponse'
+  /wallet/update:
+    post:
+      tags:
+        - wallet
+      summary: Update wallet
+      operationId: walletUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletUpdateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletUpdateResponse'
+  /wallet/search:
+    post:
+      tags:
+        - wallet
+      summary: Search wallet
+      operationId: walletSearch
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletSearchRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletSearchResponse'
+components:
+  schemas:
+
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+      discriminator:
+        propertyName: requestType
+        mapping:
+          read:   '#/components/schemas/WalletReadRequest'
+          update: '#/components/schemas/WalletUpdateRequest'
+          search: '#/components/schemas/WalletSearchRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          read:   '#/components/schemas/WalletReadResponse'
+          update: '#/components/schemas/WalletUpdateResponse'
+          search: '#/components/schemas/WalletSearchRequest'
+          init: '#/components/schemas/WalletInitResponse'
+
+    WalletId:
+      type: string
+      description: Идентификатор кошелька
+
+    BaseWallet:
+      type: object
+      description: Объект описывает свойства для update
+      properties:
+        amount:
+          type: number
+          description: счет
+
+    WalletInitResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+
+    WalletReadObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/WalletId'
+
+    WalletReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/WalletRequestDebug'
+        - type: object
+          properties:
+            wallet:
+              $ref: '#/components/schemas/WalletReadObject'
+
+    WalletUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseWallet'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/WalletId'
+
+    WalletUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/WalletRequestDebug'
+        - type: object
+          properties:
+            wallet:
+              $ref: '#/components/schemas/WalletUpdateObject'
+
+    WalletResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseWallet'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/WalletId'
+            userId:
+              $ref: './user-v1.yml/#/components/schemas/UserId'
+            currencyId:
+              $ref: './currency-v1.yml/#/components/schemas/CurrencyId'
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+
+    WalletResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом
+          properties:
+            wallet:
+              $ref: '#/components/schemas/WalletResponseObject'
+
+    WalletResponseMulti:
+      allOf:
+        - type: object
+          description: Список найденных объектов
+          properties:
+            wallets:
+              type: array
+              items:
+                $ref: '#/components/schemas/WalletResponseObject'
+
+    WalletReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/WalletResponseSingle'
+
+    WalletUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/WalletResponseSingle'
+
+    WalletSearchFilter:
+      type: object
+      description: Набор фильтров для поиска
+      properties:
+        userId:
+          $ref: '#/components/schemas/UserId'
+        currencyId:
+          $ref: '#/components/schemas/CurrencyId'
+
+    WalletSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/WalletRequestDebug'
+        - type: object
+          properties:
+            walletFilter:
+              $ref: '#/components/schemas/WalletSearchFilter'
+
+    WalletSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/WalletResponseMulti'
+
+    # STUBS ======================
+    WalletRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    WalletRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/WalletDebug'
+
+    WalletDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/WalletRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/WalletRequestDebugStubs'
+
+    WalletRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badId
+        - badAmount
+        - badSearchUserId
+        - badSearchCurrencyId

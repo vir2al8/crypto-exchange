@@ -1,0 +1,385 @@
+openapi: 3.0.4
+info:
+  title: Crypto exchange
+  description: This is a project that allows customers to trade cryptocurrencies or digital currencies for other assets, such as conventional fiat money or other digital currencies
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:7101/api/v1
+tags:
+  - name: currency
+    description: Валюта
+paths:
+  /currency/create:
+    post:
+      tags:
+        - currency
+      summary: Create currency
+      operationId: currencyCreate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CurrencyCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrencyCreateResponse'
+  /currency/read:
+    post:
+      tags:
+        - currency
+      summary: Read currency
+      operationId: currencyRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CurrencyReadRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrencyReadResponse'
+  /currency/update:
+    post:
+      tags:
+        - currency
+      summary: Update currency
+      operationId: currencyUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CurrencyUpdateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrencyUpdateResponse'
+  /currency/delete:
+    post:
+      tags:
+        - currency
+      summary: Delete currency
+      operationId: currencyDelete
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CurrencyDeleteRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrencyDeleteResponse'
+  /currency/search:
+    post:
+      tags:
+        - currency
+      summary: Search currency
+      operationId: currencySearch
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CurrencySearchRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrencySearchResponse'
+
+components:
+  schemas:
+
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/CurrencyCreateRequest'
+          read:   '#/components/schemas/CurrencyReadRequest'
+          update: '#/components/schemas/CurrencyUpdateRequest'
+          delete: '#/components/schemas/CurrencyDeleteRequest'
+          search: '#/components/schemas/CurrencySearchRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/CurrencyCreateResponse'
+          read:   '#/components/schemas/CurrencyReadResponse'
+          update: '#/components/schemas/CurrencyUpdateResponse'
+          delete: '#/components/schemas/CurrencyDeleteResponse'
+          search: '#/components/schemas/CurrencySearchResponse'
+          init: '#/components/schemas/CurrencyInitResponse'
+
+    UserId:
+      type: string
+      description: Идентификатор пользователя
+    CurrencyId:
+      type: string
+      description: Идентификатор валюты
+
+    BaseCurrency:
+      type: object
+      description: Объект описывает свойства, одинаковые для create и update
+      properties:
+        fullName:
+          type: string
+          description: Полное название валюты
+        name:
+          type: string
+          description: Абривиатура названия валюты
+        description:
+          type: string
+          description: Описание валюты
+        type:
+          $ref: '#/components/schemas/CurrencyType'
+
+    CurrencyType:
+      type: string
+      description: 'Тип валюты: криптовалюта или фиатная'
+      enum:
+        - crypto
+        - fiat
+
+    CurrencyInitResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+
+    CurrencyCreateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseCurrency'
+
+    CurrencyCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CurrencyRequestDebug'
+        - type: object
+          properties:
+            currency:
+              $ref: '#/components/schemas/CurrencyCreateObject'
+
+    CurrencyReadObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/CurrencyId'
+
+    CurrencyReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CurrencyRequestDebug'
+        - type: object
+          properties:
+            currency:
+              $ref: '#/components/schemas/CurrencyReadObject'
+
+    CurrencyUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseCurrency'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/CurrencyId'
+
+    CurrencyUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CurrencyRequestDebug'
+        - type: object
+          properties:
+            currency:
+              $ref: '#/components/schemas/CurrencyUpdateObject'
+
+    CurrencyDeleteObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/CurrencyId'
+
+    CurrencyDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CurrencyRequestDebug'
+        - type: object
+          properties:
+            currency:
+              $ref: '#/components/schemas/CurrencyDeleteObject'
+
+    CurrencySearchFilter:
+      type: object
+      description: Набор фильтров для поиска
+      properties:
+        searchString:
+          type: string
+          description: Поисковая строка, которая будет искаться в валютах
+
+    CurrencySearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/CurrencyRequestDebug'
+        - type: object
+          properties:
+            currencyFilter:
+              $ref: '#/components/schemas/CurrencySearchFilter'
+
+    CurrencyResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseCurrency'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/CurrencyId'
+            createdAt:
+              type: string
+
+    CurrencyResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом
+          properties:
+            currency:
+              $ref: '#/components/schemas/CurrencyResponseObject'
+
+    CurrencyResponseMulti:
+      allOf:
+        - type: object
+          description: Список найденных объектов
+          properties:
+            currencies:
+              type: array
+              items:
+                $ref: '#/components/schemas/CurrencyResponseObject'
+
+    CurrencyCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CurrencyResponseSingle'
+
+    CurrencyReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CurrencyResponseSingle'
+
+    CurrencyUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CurrencyResponseSingle'
+
+    CurrencyDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CurrencyResponseSingle'
+
+    CurrencySearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/CurrencyResponseMulti'
+
+    # STUBS ======================
+    CurrencyRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    CurrencyRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/CurrencyDebug'
+
+    CurrencyDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/CurrencyRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/CurrencyRequestDebugStubs'
+
+    CurrencyRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badId
+        - badFullName
+        - badName
+        - badDescription
+        - badType
+        - cannotDelete
+        - badSearchString
