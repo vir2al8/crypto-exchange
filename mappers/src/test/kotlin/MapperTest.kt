@@ -1,8 +1,11 @@
 import com.crypto.api.v1.models.*
-import models.*
+import com.crypto.common.CommonContext
+import com.crypto.common.models.*
+import com.crypto.common.stubs.CommonStub
+import com.crypto.mappers.fromTransport
+import com.crypto.mappers.toTransport
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import stubs.CommonStub
 import java.math.BigDecimal
 import java.time.Instant
 

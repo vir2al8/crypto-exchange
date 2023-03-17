@@ -1,0 +1,31 @@
+management:
+  health:
+    readinessState:
+      enabled: true
+    livenessState:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+spring:
+  jackson:
+    default-property-inclusion: non_null
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+#    path: /test.html
+    urls:
+      - name: v1
+        url: order-v1.yml
+
+server:
+  port: 7101

@@ -39,6 +39,7 @@ openApiGenerate {
      */
     globalProperties.apply {
         put("models", "")
+//        put("apis", "")
         put("modelDocs", "false")
     }
 
