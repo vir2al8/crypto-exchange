@@ -7,6 +7,7 @@ pluginManagement {
     val springframeworkBootVersion: String by settings
     val springDependencyManagementVersion: String by settings
     val pluginSpringVersion: String by settings
+    val ktorVersion: String by settings
 
     plugins {
         kotlin("jvm") version kotlinVersion apply false
@@ -18,6 +19,8 @@ pluginManagement {
         id("org.springframework.boot") version springframeworkBootVersion apply false
         id("io.spring.dependency-management") version springDependencyManagementVersion apply false
         kotlin("plugin.spring") version pluginSpringVersion apply false
+
+        id("io.ktor.plugin") version ktorVersion apply false
     }
 }
 
@@ -26,3 +29,4 @@ include("mappers")
 include("common")
 include("stubs")
 include("order-app-spring")
+include("order-app-ktor")
