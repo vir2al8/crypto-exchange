@@ -29,7 +29,7 @@ subprojects {
 }
 
 detekt {
-    source = files("common", "api", "mappers", "order-app-spring")
+    source = files("common", "api", "mappers", "order-app-spring", "order-app-ktor")
     buildUponDefaultConfig = true // preconfigure defaults
     allRules = false // activate all available (even unstable) rules.
     config = files("$projectDir/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
