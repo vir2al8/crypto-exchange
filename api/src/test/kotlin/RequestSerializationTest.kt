@@ -1,3 +1,4 @@
+import com.crypto.api.apiObjectMapper
 import com.crypto.api.v1.models.*
 import org.junit.Test
 import java.math.BigDecimal
