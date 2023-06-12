@@ -1,7 +1,7 @@
 package com.crypto.cor.handlers
 
 import com.crypto.cor.CorDslMarker
-import com.crypto.cor.ICorChainDsl
+import com.crypto.cor.CorChainDsl
 import com.crypto.cor.CorExec
 import com.crypto.cor.ICorExecDsl
 import kotlinx.coroutines.coroutineScope
@@ -30,9 +30,9 @@ suspend fun <T> executeParallel(context: T, execs: List<CorExec<T>>): Unit = cor
 }
 
 @CorDslMarker
-class CorChainDsl<T>(
+class CorChainDslImpl<T>(
     private val handler: suspend (T, List<CorExec<T>>) -> Unit = ::executeSequential,
-) : CorExecDsl<T>(), ICorChainDsl<T> {
+) : CorExecDsl<T>(), CorChainDsl<T> {
     private val workers: MutableList<ICorExecDsl<T>> = mutableListOf()
     override fun add(worker: ICorExecDsl<T>) {
         workers.add(worker)

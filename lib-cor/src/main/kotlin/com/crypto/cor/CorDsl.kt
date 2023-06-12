@@ -1,7 +1,7 @@
 package com.crypto.cor
 
-import com.crypto.cor.handlers.CorChainDsl
-import com.crypto.cor.handlers.CorWorkerDsl
+import com.crypto.cor.handlers.CorChainDslImpl
+import com.crypto.cor.handlers.CorWorkerDslImpl
 import com.crypto.cor.handlers.executeParallel
 
 /**
@@ -21,7 +21,7 @@ interface ICorExecDsl<T> {
  * Билдер (dsl) для цепочек (chain)
  */
 @CorDslMarker
-interface ICorChainDsl<T> : ICorExecDsl<T> {
+interface CorChainDsl<T> : ICorExecDsl<T> {
     fun add(worker: ICorExecDsl<T>)
 }
 
@@ -29,7 +29,7 @@ interface ICorChainDsl<T> : ICorExecDsl<T> {
  * Билдер (dsl) для рабочих (worker)
  */
 @CorDslMarker
-interface ICorWorkerDsl<T> : ICorExecDsl<T> {
+interface CorWorkerDsl<T> : ICorExecDsl<T> {
     fun handle(function: suspend T.() -> Unit)
 }
 
@@ -54,40 +54,40 @@ interface ICorWorkerDsl<T> : ICorExecDsl<T> {
  *  }
  * ```
  */
-fun <T> rootChain(function: ICorChainDsl<T>.() -> Unit): ICorChainDsl<T> = CorChainDsl<T>().apply(function)
+fun <T> rootChain(function: CorChainDsl<T>.() -> Unit): CorChainDsl<T> = CorChainDslImpl<T>().apply(function)
 
 
 /**
  * Создает цепочку, элементы которой исполняются последовательно.
  */
-fun <T> ICorChainDsl<T>.chain(function: ICorChainDsl<T>.() -> Unit) {
-    add(CorChainDsl<T>().apply(function))
+fun <T> CorChainDsl<T>.chain(function: CorChainDsl<T>.() -> Unit) {
+    add(CorChainDslImpl<T>().apply(function))
 }
 
 /**
  * Создает цепочку, элементы которой исполняются параллельно. Будьте аккуратны с доступом к контексту -
  * при необходимости используйте синхронизацию
  */
-fun <T> ICorChainDsl<T>.parallel(function: ICorChainDsl<T>.() -> Unit) {
-    add(CorChainDsl<T>(::executeParallel).apply(function))
+fun <T> CorChainDsl<T>.parallel(function: CorChainDsl<T>.() -> Unit) {
+    add(CorChainDslImpl<T>(::executeParallel).apply(function))
 }
 
 /**
  * Создает рабочего
  */
-fun <T> ICorChainDsl<T>.worker(function: ICorWorkerDsl<T>.() -> Unit) {
-    add(CorWorkerDsl<T>().apply(function))
+fun <T> CorChainDsl<T>.worker(function: CorWorkerDsl<T>.() -> Unit) {
+    add(CorWorkerDslImpl<T>().apply(function))
 }
 
 /**
  * Создает рабочего с on и except по умолчанию
  */
-fun <T> ICorChainDsl<T>.worker(
+fun <T> CorChainDsl<T>.worker(
     title: String,
     description: String = "",
     blockHandle: T.() -> Unit
 ) {
-    add(CorWorkerDsl<T>().also {
+    add(CorWorkerDslImpl<T>().also {
         it.title = title
         it.description = description
         it.handle(blockHandle)

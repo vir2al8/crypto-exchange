@@ -2,7 +2,7 @@ package com.crypto.cor.handlers
 
 import com.crypto.cor.CorDslMarker
 import com.crypto.cor.CorExec
-import com.crypto.cor.ICorWorkerDsl
+import com.crypto.cor.CorWorkerDsl
 
 class CorWorker<T>(
     title: String,
@@ -15,7 +15,7 @@ class CorWorker<T>(
 }
 
 @CorDslMarker
-class CorWorkerDsl<T> : CorExecDsl<T>(), ICorWorkerDsl<T> {
+class CorWorkerDslImpl<T> : CorExecDsl<T>(), CorWorkerDsl<T> {
     private var blockHandle: suspend T.() -> Unit = {}
     override fun handle(function: suspend T.() -> Unit) {
         blockHandle = function

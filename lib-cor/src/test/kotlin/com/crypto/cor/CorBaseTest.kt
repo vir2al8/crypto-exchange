@@ -161,7 +161,7 @@ class CorBaseTest {
     }
 }
 
-private fun ICorChainDsl<TestContext>.printResult() = worker(title = "Print example") {
+private fun CorChainDsl<TestContext>.printResult() = worker(title = "Print example") {
     println("some = $some")
 }
 
