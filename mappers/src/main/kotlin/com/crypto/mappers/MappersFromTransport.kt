@@ -76,9 +76,9 @@ fun OrderDebug?.transportToStubCase() = when (this?.stub) {
     OrderRequestDebugStubs.NOT_FOUND -> CommonStub.NOT_FOUND
     OrderRequestDebugStubs.BAD_ID -> CommonStub.BAD_ID
     OrderRequestDebugStubs.BAD_TYPE -> CommonStub.BAD_TYPE
-    OrderRequestDebugStubs.BAD_STATUS -> CommonStub.BAD_STATUS
+    OrderRequestDebugStubs.BAD_OPERATION -> CommonStub.BAD_OPERATION
     OrderRequestDebugStubs.BAD_WALLET_ID -> CommonStub.BAD_WALLET_ID
-    OrderRequestDebugStubs.CANNOT_DELETE -> CommonStub.CANNOT_DELETE
+    OrderRequestDebugStubs.DB_ERROR -> CommonStub.DB_ERROR
     null -> CommonStub.NONE
 }
 

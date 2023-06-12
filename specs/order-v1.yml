@@ -350,6 +350,6 @@ components:
         - notFound
         - badId
         - badType
-        - badStatus
+        - badOperation
         - badWalletId
-        - cannotDelete
+        - dbError

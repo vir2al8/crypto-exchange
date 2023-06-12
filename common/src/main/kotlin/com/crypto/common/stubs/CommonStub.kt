@@ -5,8 +5,8 @@ enum class CommonStub {
     SUCCESS,
     NOT_FOUND,
     BAD_ID,
-    CANNOT_DELETE,
     BAD_TYPE,
-    BAD_STATUS,
-    BAD_WALLET_ID
+    BAD_OPERATION,
+    BAD_WALLET_ID,
+    DB_ERROR
 }
