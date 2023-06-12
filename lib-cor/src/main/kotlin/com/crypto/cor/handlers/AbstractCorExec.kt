@@ -1,6 +1,6 @@
 package com.crypto.cor.handlers
 
-import com.crypto.cor.ICorExec
+import com.crypto.cor.CorExec
 import com.crypto.cor.ICorExecDsl
 
 abstract class AbstractCorExec<T>(
@@ -8,7 +8,7 @@ abstract class AbstractCorExec<T>(
     override val description: String = "",
     private val blockOn: suspend  T.() -> Boolean = { true },
     private val blockExcept: suspend T.(Throwable) -> Unit = {},
-) : ICorExec<T> {
+) : CorExec<T> {
     protected abstract suspend fun handle(context: T)
 
     private suspend fun on (context: T): Boolean = context.blockOn()

@@ -14,7 +14,7 @@ interface ICorExecDsl<T> {
     fun on(function: suspend T.() -> Boolean)
     fun except(function: suspend T.(e: Throwable) -> Unit)
 
-    fun build(): ICorExec<T>
+    fun build(): CorExec<T>
 }
 
 /**

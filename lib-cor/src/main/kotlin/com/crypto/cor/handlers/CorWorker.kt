@@ -1,7 +1,7 @@
 package com.crypto.cor.handlers
 
 import com.crypto.cor.CorDslMarker
-import com.crypto.cor.ICorExec
+import com.crypto.cor.CorExec
 import com.crypto.cor.ICorWorkerDsl
 
 class CorWorker<T>(
@@ -21,7 +21,7 @@ class CorWorkerDsl<T> : CorExecDsl<T>(), ICorWorkerDsl<T> {
         blockHandle = function
     }
 
-    override fun build(): ICorExec<T> = CorWorker(
+    override fun build(): CorExec<T> = CorWorker(
         title = title,
         description = description,
         blockOn = blockOn,

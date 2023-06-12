@@ -1,6 +1,6 @@
 package com.crypto.cor
 
-interface ICorExec<T> {
+interface CorExec<T> {
     val title: String
     val description: String
 
