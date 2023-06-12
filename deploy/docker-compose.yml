@@ -15,21 +15,27 @@ services:
         fluentd-address: localhost:24224
         tag: app.logs
 
-  app:
-    image: simple-kotlin-app:latest
+  rabbitmq:
+    image: rabbitmq:management-alpine
     ports:
-      - "8080:8080"
-    depends_on:
-      - fluent-bit
-    logging:
-      driver: "fluentd"
-      options:
-        # куда посылать лог-сообщения, необходимо чтобы адрес
-        # совпадал с настройками плагина forward
-        fluentd-address: localhost:24224
-        # теги используются для маршрутизации лог-сообщений, тема
-        # маршрутизации будет рассмотрена ниже
-        tag: app.logs
+      - "5672:5672"
+      - "15672:15672"
+
+#  app:
+#    image: simple-kotlin-app:latest
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - fluent-bit
+#    logging:
+#      driver: "fluentd"
+#      options:
+#        # куда посылать лог-сообщения, необходимо чтобы адрес
+#        # совпадал с настройками плагина forward
+#        fluentd-address: localhost:24224
+#        # теги используются для маршрутизации лог-сообщений, тема
+#        # маршрутизации будет рассмотрена ниже
+#        tag: app.logs
 
   fluent-bit:
     container_name: fluent-bit
