@@ -1,7 +1,7 @@
 package com.crypto.cor.handlers
 
 import com.crypto.cor.CorExec
-import com.crypto.cor.ICorExecDsl
+import com.crypto.cor.CorExecDsl
 
 abstract class AbstractCorExec<T>(
     override val title: String,
@@ -26,7 +26,7 @@ abstract class AbstractCorExec<T>(
     }
 }
 
-abstract class CorExecDsl<T> : ICorExecDsl<T> {
+abstract class CorExecDslImpl<T> : CorExecDsl<T> {
     protected var blockOn: suspend T.() -> Boolean = { true }
     protected var blockExcept: suspend T.(e: Throwable) -> Unit = { e: Throwable -> throw e }
 

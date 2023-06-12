@@ -63,7 +63,7 @@ class CorBaseTest {
         assertEquals("w1; w2; ", ctx.history)
     }
 
-    private suspend fun execute(dsl: ICorExecDsl<TestContext>): TestContext {
+    private suspend fun execute(dsl: CorExecDsl<TestContext>): TestContext {
         val ctx = TestContext()
         dsl.build().exec(ctx)
         return ctx

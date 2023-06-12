@@ -15,7 +15,7 @@ class CorWorker<T>(
 }
 
 @CorDslMarker
-class CorWorkerDslImpl<T> : CorExecDsl<T>(), CorWorkerDsl<T> {
+class CorWorkerDslImpl<T> : CorExecDslImpl<T>(), CorWorkerDsl<T> {
     private var blockHandle: suspend T.() -> Unit = {}
     override fun handle(function: suspend T.() -> Unit) {
         blockHandle = function

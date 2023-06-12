@@ -8,7 +8,7 @@ import com.crypto.cor.handlers.executeParallel
  * Базовый билдер (dsl)
  */
 @CorDslMarker
-interface ICorExecDsl<T> {
+interface CorExecDsl<T> {
     var title: String
     var description: String
     fun on(function: suspend T.() -> Boolean)
@@ -21,15 +21,15 @@ interface ICorExecDsl<T> {
  * Билдер (dsl) для цепочек (chain)
  */
 @CorDslMarker
-interface CorChainDsl<T> : ICorExecDsl<T> {
-    fun add(worker: ICorExecDsl<T>)
+interface CorChainDsl<T> : CorExecDsl<T> {
+    fun add(worker: CorExecDsl<T>)
 }
 
 /**
  * Билдер (dsl) для рабочих (worker)
  */
 @CorDslMarker
-interface CorWorkerDsl<T> : ICorExecDsl<T> {
+interface CorWorkerDsl<T> : CorExecDsl<T> {
     fun handle(function: suspend T.() -> Unit)
 }
 
