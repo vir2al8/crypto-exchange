@@ -70,6 +70,7 @@ class OrderProcessor {
                     worker("Очистка id") { orderValidating.id = CommonOrderId(orderValidating.id.asString().trim()) }
                     validateIdNotEmpty("Проверка на непустой id")
                     validateIdProperFormat("Проверка формата id")
+
                     finishOrderValidation("Успешное завершение процедуры валидации")
                 }
             }
