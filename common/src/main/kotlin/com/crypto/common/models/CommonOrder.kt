@@ -12,4 +12,12 @@ data class CommonOrder(
     var status: CommonOrderStatus = CommonOrderStatus.NONE,
     var createdAt: Instant = Instant.MIN,
     var updatedAt: Instant = Instant.MIN
-)
+) {
+    fun deepCopy(): CommonOrder = copy()
+
+    fun isEmpty() = this == NONE
+
+    companion object {
+        val NONE = CommonOrder()
+    }
+}

@@ -1,4 +1,4 @@
-package ru.otus.otuskotlin.marketplace.biz.validation.stub
+package com.crypto.logic.workers.stubs
 
 import com.crypto.common.CommonContext
 import com.crypto.common.models.*

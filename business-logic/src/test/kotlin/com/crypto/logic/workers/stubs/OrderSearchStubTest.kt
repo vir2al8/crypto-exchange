@@ -1,4 +1,4 @@
-package ru.otus.otuskotlin.marketplace.biz.validation.stub
+package com.crypto.logic.workers.stubs
 
 import com.crypto.common.CommonContext
 import com.crypto.common.models.*
@@ -22,7 +22,7 @@ class OrderSearchStubTest {
             state = CommonState.NONE,
             workMode = CommonWorkMode.STUB,
             stubCase = CommonStub.SUCCESS,
-            orderFilterRequest = CommonFilterOrder(
+            orderFilterRequest = CommonOrderFilter(
                 operation = operation
             ),
         )
@@ -41,7 +41,7 @@ class OrderSearchStubTest {
             state = CommonState.NONE,
             workMode = CommonWorkMode.STUB,
             stubCase = CommonStub.DB_ERROR,
-            orderFilterRequest = CommonFilterOrder(
+            orderFilterRequest = CommonOrderFilter(
                 operation = operation
             ),
         )
@@ -57,7 +57,7 @@ class OrderSearchStubTest {
             state = CommonState.NONE,
             workMode = CommonWorkMode.STUB,
             stubCase = CommonStub.BAD_OPERATION,
-            orderFilterRequest = CommonFilterOrder(
+            orderFilterRequest = CommonOrderFilter(
             ),
         )
         processor.exec(ctx)
@@ -73,7 +73,7 @@ class OrderSearchStubTest {
             state = CommonState.NONE,
             workMode = CommonWorkMode.STUB,
             stubCase = CommonStub.NONE,
-            orderFilterRequest = CommonFilterOrder(
+            orderFilterRequest = CommonOrderFilter(
                 operation = operation
             ),
         )

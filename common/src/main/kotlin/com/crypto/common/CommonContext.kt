@@ -14,9 +14,15 @@ data class CommonContext(
 
     var requestId: CommonRequestId = CommonRequestId.NONE,
     var timeStart: Instant = Instant.MIN,
-
     var orderRequest: CommonOrder = CommonOrder(),
-    var orderFilterRequest: CommonFilterOrder = CommonFilterOrder(),
+    var orderFilterRequest: CommonOrderFilter = CommonOrderFilter(),
+
+    var orderValidating: CommonOrder = CommonOrder(),
+    var orderFilterValidating: CommonOrderFilter = CommonOrderFilter(),
+
+    var orderValidated: CommonOrder = CommonOrder(),
+    var orderFilterValidated: CommonOrderFilter = CommonOrderFilter(),
+
     var orderResponse: CommonOrder = CommonOrder(),
     var ordersResponse: MutableList<CommonOrder> = mutableListOf()
 )

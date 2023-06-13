@@ -59,7 +59,7 @@ fun OrderCreateObject.toInternal() = CommonOrder(
     operation = this.operation.fromTransport(),
 )
 
-fun OrderSearchFilter?.toInternal() = CommonFilterOrder(
+fun OrderSearchFilter?.toInternal() = CommonOrderFilter(
     type = this?.type.fromTransport(),
     operation = this?.operation.fromTransport(),
     status = this?.status.fromTransport(),
