@@ -1,4 +1,4 @@
-package com.crypto.config
+package com.crypto.configs
 
 data class RabbitConfig(
     val host: String = HOST,

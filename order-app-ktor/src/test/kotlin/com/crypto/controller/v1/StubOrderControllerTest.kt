@@ -27,7 +27,7 @@ class StubOrderControllerTest {
                 stub = OrderRequestDebugStubs.SUCCESS
             ),
             order = OrderCreateObject(
-                walletId = "1",
+                walletId = "wallet-1",
                 amount = BigDecimal.valueOf(10),
                 type = OrderType.MARKET,
                 operation = OrderOperation.BUYING

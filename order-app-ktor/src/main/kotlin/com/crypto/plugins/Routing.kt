@@ -1,5 +1,6 @@
 package com.crypto.plugins
 
+import com.crypto.configs.OrderAppConfigs
 import com.crypto.controller.v1.createOrder
 import com.crypto.controller.v1.deleteOrder
 import com.crypto.controller.v1.readOrder
@@ -9,14 +10,14 @@ import io.ktor.server.http.content.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Application.configureRouting() {
+fun Application.configureRouting(appConfigs: OrderAppConfigs) {
     routing {
         get("/") {
             call.respondText("Hello World!")
         }
 
         route("api/v1") {
-            v1Order()
+            v1Order(appConfigs)
         }
 
         static("static") {
@@ -25,19 +26,19 @@ fun Application.configureRouting() {
     }
 }
 
-fun Route.v1Order() {
+fun Route.v1Order(appConfigs: OrderAppConfigs) {
     route("order") {
         post("create") {
-            call.createOrder()
+            call.createOrder(appConfigs)
         }
         post("read") {
-            call.readOrder()
+            call.readOrder(appConfigs)
         }
         post("delete") {
-            call.deleteOrder()
+            call.deleteOrder(appConfigs)
         }
         post("search") {
-            call.searchOrder()
+            call.searchOrder(appConfigs)
         }
     }
 }

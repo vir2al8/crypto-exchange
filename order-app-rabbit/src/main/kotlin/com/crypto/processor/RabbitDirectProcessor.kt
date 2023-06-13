@@ -4,8 +4,8 @@ import com.crypto.api.apiObjectMapper
 import com.crypto.api.v1.models.IRequest
 import com.crypto.common.CommonContext
 import com.crypto.common.models.CommonState
-import com.crypto.config.RabbitConfig
-import com.crypto.config.RabbitExchangeConfiguration
+import com.crypto.configs.RabbitConfig
+import com.crypto.configs.RabbitExchangeConfiguration
 import com.crypto.mappers.fromTransport
 import com.crypto.mappers.toTransport
 import com.crypto.stubs.OrderStub

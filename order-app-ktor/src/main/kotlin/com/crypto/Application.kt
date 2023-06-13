@@ -1,8 +1,10 @@
 package com.crypto
 
+import com.crypto.configs.OrderAppConfigs
 import com.crypto.plugins.configureMonitoring
 import com.crypto.plugins.configureRouting
 import com.crypto.plugins.configureSerialization
+import com.crypto.plugins.initAppConfigs
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -12,8 +14,10 @@ fun main() {
         .start(wait = true)
 }
 
-fun Application.module() {
+fun Application.module(
+    appConfigs: OrderAppConfigs = initAppConfigs()
+) {
     configureSerialization()
     configureMonitoring()
-    configureRouting()
+    configureRouting(appConfigs)
 }
