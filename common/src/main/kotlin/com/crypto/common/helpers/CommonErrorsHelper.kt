@@ -54,13 +54,13 @@ fun errorAdministration(
     exception = exception,
 )
 
-val errorNotFound = CommonError(
+val commonErrorNotFound = CommonError(
     field = "id",
     message = "Not Found",
     code = "not-found"
 )
 
-val errorEmptyId = CommonError(
+val commonErrorEmptyId = CommonError(
     field = "id",
     message = "Id must not be null or blank"
 )
