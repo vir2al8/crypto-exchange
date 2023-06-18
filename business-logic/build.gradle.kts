@@ -13,6 +13,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
 
     testImplementation(project(":repository-stubs"))
+    testImplementation(project(":repository-tests"))
     testImplementation(kotlin("test-junit"))
     testImplementation(kotlin("test"))
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
 }

@@ -7,8 +7,8 @@ import com.crypto.repostub.OrderRepositoryStub
 
 fun testSettings(repo: OrderRepository? = null) = OrderAppConfigs(
     corSettings = CommonSettings(
-        repoStub = OrderRepositoryStub(),
-        repoTest = repo ?: OrderRepositoryStub(),
-        repoProd = repo ?: OrderRepositoryStub(),
+        repositoryStub = OrderRepositoryStub(),
+        repositoryTest = repo ?: OrderRepositoryStub(),
+        repositoryProd = repo ?: OrderRepositoryStub(),
     ),
 )

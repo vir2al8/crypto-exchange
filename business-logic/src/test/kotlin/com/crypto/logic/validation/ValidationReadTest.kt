@@ -9,7 +9,7 @@ import kotlin.test.Test
 class ValidationReadTest {
     private val settings by lazy {
         CommonSettings(
-            repoTest = OrderRepositoryStub()
+            repositoryTest = OrderRepositoryStub()
         )
     }
 

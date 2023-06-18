@@ -5,16 +5,18 @@ import com.crypto.common.models.*
 import com.crypto.common.stubs.CommonStub
 import com.crypto.logic.OrderProcessor
 import com.crypto.stubs.OrderStub
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class OrderDeleteStubTest {
     private val processor = OrderProcessor()
     val id = CommonOrderId("order-1")
 
     @Test
-    fun delete() = runBlocking {
+    fun delete() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.DELETE,
             state = CommonState.NONE,
@@ -29,7 +31,7 @@ class OrderDeleteStubTest {
     }
 
     @Test
-    fun badId() = runBlocking {
+    fun badId() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.DELETE,
             state = CommonState.NONE,
@@ -45,7 +47,7 @@ class OrderDeleteStubTest {
     }
 
     @Test
-    fun databaseError() = runBlocking {
+    fun databaseError() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.DELETE,
             state = CommonState.NONE,
@@ -61,7 +63,7 @@ class OrderDeleteStubTest {
     }
 
     @Test
-    fun badNoCase() = runBlocking {
+    fun badNoCase() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.DELETE,
             state = CommonState.NONE,

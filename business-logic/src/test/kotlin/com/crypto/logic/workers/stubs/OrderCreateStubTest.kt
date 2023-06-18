@@ -5,10 +5,12 @@ import com.crypto.common.models.*
 import com.crypto.common.stubs.CommonStub
 import com.crypto.logic.OrderProcessor
 import com.crypto.stubs.OrderStub
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class OrderCreateStubTest {
     private val processor = OrderProcessor()
     val id = CommonOrderId("order-1")
@@ -17,7 +19,7 @@ class OrderCreateStubTest {
     val operation = CommonOrderOperation.BUYING
 
     @Test
-    fun create() = runBlocking {
+    fun create() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.CREATE,
             state = CommonState.NONE,
@@ -37,7 +39,7 @@ class OrderCreateStubTest {
     }
 
     @Test
-    fun badWalletId() = runBlocking {
+    fun badWalletId() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.CREATE,
             state = CommonState.NONE,
@@ -55,7 +57,7 @@ class OrderCreateStubTest {
     }
 
     @Test
-    fun badType() = runBlocking {
+    fun badType() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.CREATE,
             state = CommonState.NONE,
@@ -73,7 +75,7 @@ class OrderCreateStubTest {
     }
 
     @Test
-    fun badOperation() = runBlocking {
+    fun badOperation() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.CREATE,
             state = CommonState.NONE,
@@ -91,7 +93,7 @@ class OrderCreateStubTest {
     }
 
     @Test
-    fun databaseError() = runBlocking {
+    fun databaseError() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.CREATE,
             state = CommonState.NONE,
@@ -109,7 +111,7 @@ class OrderCreateStubTest {
     }
 
     @Test
-    fun badNoCase() = runBlocking {
+    fun badNoCase() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.CREATE,
             state = CommonState.NONE,

@@ -8,8 +8,8 @@ import io.ktor.server.application.*
 
 fun Application.initAppConfigs(): OrderAppConfigs {
     val corSettings = CommonSettings(
-        repoTest = getDatabaseConf(OrderDbType.TEST),
-        repoProd = getDatabaseConf(OrderDbType.PROD),
+        repositoryTest = getDatabaseConf(OrderDbType.TEST),
+        repositoryProd = getDatabaseConf(OrderDbType.PROD),
     )
     return OrderAppConfigs(
         appUrls = environment.config.propertyOrNull("ktor.urls")?.getList() ?: emptyList(),

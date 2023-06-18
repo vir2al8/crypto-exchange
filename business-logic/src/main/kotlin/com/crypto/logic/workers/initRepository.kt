@@ -13,9 +13,9 @@ fun CorChainDsl<CommonContext>.initRepository(title: String) = worker {
     description = "Вычисление основного рабочего репозитория в зависимости от запрошенного режима работы".trimIndent()
     handle {
         orderRepository = when (workMode) {
-            CommonWorkMode.TEST -> settings.repoTest
-            CommonWorkMode.STUB -> settings.repoStub
-            else -> settings.repoProd
+            CommonWorkMode.TEST -> settings.repositoryTest
+            CommonWorkMode.STUB -> settings.repositoryStub
+            else -> settings.repositoryProd
         }
         if (workMode != CommonWorkMode.STUB && orderRepository == OrderRepository.NONE) fail(
             errorAdministration(

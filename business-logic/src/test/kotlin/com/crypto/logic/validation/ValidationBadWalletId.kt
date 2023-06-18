@@ -3,13 +3,14 @@ package com.crypto.logic.validation
 import com.crypto.common.CommonContext
 import com.crypto.common.models.*
 import com.crypto.logic.OrderProcessor
-import com.crypto.stubs.OrderStub
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-fun validationWalletIdCorrect(command: CommonCommand, processor: OrderProcessor) = runBlocking {
+@OptIn(ExperimentalCoroutinesApi::class)
+fun validationWalletIdCorrect(command: CommonCommand, processor: OrderProcessor) = runTest {
     val ctx = CommonContext(
         command = command,
         state = CommonState.NONE,
@@ -28,7 +29,8 @@ fun validationWalletIdCorrect(command: CommonCommand, processor: OrderProcessor)
     assertNotEquals(CommonState.FAILING, ctx.state)
 }
 
-fun validationWalletIdTrim(command: CommonCommand, processor: OrderProcessor) = runBlocking {
+@OptIn(ExperimentalCoroutinesApi::class)
+fun validationWalletIdTrim(command: CommonCommand, processor: OrderProcessor) = runTest {
     val ctx = CommonContext(
         command = command,
         state = CommonState.NONE,
@@ -47,7 +49,8 @@ fun validationWalletIdTrim(command: CommonCommand, processor: OrderProcessor) = 
     assertNotEquals(CommonState.FAILING, ctx.state)
 }
 
-fun validationWalletIdEmpty(command: CommonCommand, processor: OrderProcessor) = runBlocking {
+@OptIn(ExperimentalCoroutinesApi::class)
+fun validationWalletIdEmpty(command: CommonCommand, processor: OrderProcessor) = runTest {
     val ctx = CommonContext(
         command = command,
         state = CommonState.NONE,
@@ -69,7 +72,8 @@ fun validationWalletIdEmpty(command: CommonCommand, processor: OrderProcessor) =
     assertContains(error?.message ?: "", "walledId")
 }
 
-fun validationWalletIdFormat(command: CommonCommand, processor: OrderProcessor) = runBlocking {
+@OptIn(ExperimentalCoroutinesApi::class)
+fun validationWalletIdFormat(command: CommonCommand, processor: OrderProcessor) = runTest {
     val ctx = CommonContext(
         command = command,
         state = CommonState.NONE,
