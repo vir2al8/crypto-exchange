@@ -5,9 +5,9 @@ plugins {
 group = rootProject.group
 version = rootProject.version
 
-val kotestVersion: String by project
-
 dependencies {
+    val kotestVersion: String by project
+
     testImplementation(kotlin("test-junit5"))
 
 //    implementation("io.kotest:kotest-framework-engine:$kotestVersion")

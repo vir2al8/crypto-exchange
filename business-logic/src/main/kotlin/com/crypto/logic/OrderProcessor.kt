@@ -1,6 +1,7 @@
 package com.crypto.logic
 
 import com.crypto.common.CommonContext
+import com.crypto.common.CommonSettings
 import com.crypto.common.models.CommonCommand
 import com.crypto.common.models.CommonOrderId
 import com.crypto.common.models.CommonWalletId
@@ -8,16 +9,20 @@ import com.crypto.cor.rootChain
 import com.crypto.cor.worker
 import com.crypto.logic.groups.operation
 import com.crypto.logic.validation.*
+import com.crypto.logic.workers.initRepository
 import com.crypto.logic.workers.initStatus
 import com.crypto.logic.workers.stubs
 import com.crypto.logic.workers.stubs.*
 
-class OrderProcessor {
-    suspend fun exec(ctx: CommonContext) = BusinessChain.exec(ctx)
+class OrderProcessor(
+    private val settings: CommonSettings = CommonSettings()
+) {
+    suspend fun exec(ctx: CommonContext) = BusinessChain.exec(ctx.apply { settings = this@OrderProcessor.settings })
 
     companion object {
         private val BusinessChain = rootChain<CommonContext> {
             initStatus("Инициализация статуса")
+            initRepository("Инициализация репозитория")
 
             operation("Создание ордера", CommonCommand.CREATE) {
                 stubs("Обработка стабов") {

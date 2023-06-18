@@ -1,13 +1,20 @@
 package com.crypto.logic.validation
 
+import com.crypto.common.CommonSettings
 import com.crypto.common.models.CommonCommand
 import com.crypto.logic.OrderProcessor
+import com.crypto.repostub.OrderRepositoryStub
 import kotlin.test.Test
 
 class ValidationDeleteTest {
+    private val settings by lazy {
+        CommonSettings(
+            repoTest = OrderRepositoryStub()
+        )
+    }
 
     private val command = CommonCommand.DELETE
-    private val processor by lazy { OrderProcessor() }
+    private val processor by lazy { OrderProcessor(settings) }
 
     @Test fun correctId() = validationIdCorrect(command, processor)
     @Test fun trimId() = validationIdTrim(command, processor)
