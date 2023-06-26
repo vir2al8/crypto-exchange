@@ -3,12 +3,14 @@ package com.crypto.logic.validation
 import com.crypto.common.CommonContext
 import com.crypto.common.models.*
 import com.crypto.logic.OrderProcessor
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-fun validationIdCorrect(command: CommonCommand, processor: OrderProcessor) = runBlocking {
+@OptIn(ExperimentalCoroutinesApi::class)
+fun validationIdCorrect(command: CommonCommand, processor: OrderProcessor) = runTest {
     val ctx = CommonContext(
         command = command,
         state = CommonState.NONE,
@@ -26,7 +28,8 @@ fun validationIdCorrect(command: CommonCommand, processor: OrderProcessor) = run
     assertNotEquals(CommonState.FAILING, ctx.state)
 }
 
-fun validationIdTrim(command: CommonCommand, processor: OrderProcessor) = runBlocking {
+@OptIn(ExperimentalCoroutinesApi::class)
+fun validationIdTrim(command: CommonCommand, processor: OrderProcessor) = runTest {
     val ctx = CommonContext(
         command = command,
         state = CommonState.NONE,
@@ -44,7 +47,8 @@ fun validationIdTrim(command: CommonCommand, processor: OrderProcessor) = runBlo
     assertNotEquals(CommonState.FAILING, ctx.state)
 }
 
-fun validationIdEmpty(command: CommonCommand, processor: OrderProcessor) = runBlocking {
+@OptIn(ExperimentalCoroutinesApi::class)
+fun validationIdEmpty(command: CommonCommand, processor: OrderProcessor) = runTest {
     val ctx = CommonContext(
         command = command,
         state = CommonState.NONE,
@@ -65,7 +69,8 @@ fun validationIdEmpty(command: CommonCommand, processor: OrderProcessor) = runBl
     assertContains(error?.message ?: "", "id")
 }
 
-fun validationIdFormat(command: CommonCommand, processor: OrderProcessor) = runBlocking {
+@OptIn(ExperimentalCoroutinesApi::class)
+fun validationIdFormat(command: CommonCommand, processor: OrderProcessor) = runTest {
     val ctx = CommonContext(
         command = command,
         state = CommonState.NONE,

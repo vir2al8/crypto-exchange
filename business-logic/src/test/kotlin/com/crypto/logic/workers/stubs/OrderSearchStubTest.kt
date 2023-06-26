@@ -5,18 +5,20 @@ import com.crypto.common.models.*
 import com.crypto.common.stubs.CommonStub
 import com.crypto.logic.OrderProcessor
 import com.crypto.stubs.OrderStub
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class OrderSearchStubTest {
     private val processor = OrderProcessor()
     val operation = CommonOrderOperation.BUYING
 
     @Test
-    fun read() = runBlocking {
+    fun read() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.SEARCH,
             state = CommonState.NONE,
@@ -35,7 +37,7 @@ class OrderSearchStubTest {
     }
 
     @Test
-    fun databaseError() = runBlocking {
+    fun databaseError() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.SEARCH,
             state = CommonState.NONE,
@@ -51,7 +53,7 @@ class OrderSearchStubTest {
     }
 
     @Test
-    fun badOperation() = runBlocking {
+    fun badOperation() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.CREATE,
             state = CommonState.NONE,
@@ -67,7 +69,7 @@ class OrderSearchStubTest {
     }
 
     @Test
-    fun badNoCase() = runBlocking {
+    fun badNoCase() = runTest {
         val ctx = CommonContext(
             command = CommonCommand.SEARCH,
             state = CommonState.NONE,

@@ -1,23 +1,32 @@
 package com.crypto.logic
 
 import com.crypto.common.CommonContext
+import com.crypto.common.CommonSettings
 import com.crypto.common.models.CommonCommand
 import com.crypto.common.models.CommonOrderId
+import com.crypto.common.models.CommonState
 import com.crypto.common.models.CommonWalletId
+import com.crypto.cor.chain
 import com.crypto.cor.rootChain
 import com.crypto.cor.worker
 import com.crypto.logic.groups.operation
+import com.crypto.logic.repository.*
 import com.crypto.logic.validation.*
+import com.crypto.logic.workers.initRepository
 import com.crypto.logic.workers.initStatus
+import com.crypto.logic.workers.prepareResult
 import com.crypto.logic.workers.stubs
 import com.crypto.logic.workers.stubs.*
 
-class OrderProcessor {
-    suspend fun exec(ctx: CommonContext) = BusinessChain.exec(ctx)
+class OrderProcessor(
+    private val settings: CommonSettings = CommonSettings()
+) {
+    suspend fun exec(ctx: CommonContext) = BusinessChain.exec(ctx.apply { settings = this@OrderProcessor.settings })
 
     companion object {
         private val BusinessChain = rootChain<CommonContext> {
             initStatus("Инициализация статуса")
+            initRepository("Инициализация репозитория")
 
             operation("Создание ордера", CommonCommand.CREATE) {
                 stubs("Обработка стабов") {
@@ -41,6 +50,12 @@ class OrderProcessor {
 
                     finishOrderValidation("Завершение проверок")
                 }
+                chain {
+                    title = "Логика сохранения"
+                    repositoryPrepareCreate("Подготовка объекта для сохранения")
+                    repositoryCreate("Создание order in db")
+                }
+                prepareResult("Подготовка ответа")
             }
             operation("Получить ордер", CommonCommand.READ) {
                 stubs("Обработка стабов") {
@@ -57,6 +72,16 @@ class OrderProcessor {
 
                     finishOrderValidation("Успешное завершение процедуры валидации")
                 }
+                chain {
+                    title = "Логика чтения"
+                    repositoryRead("Read order from db")
+                    worker {
+                        title = "Подготовка ответа для Read"
+                        on { state == CommonState.RUNNING }
+                        handle { orderRepositoryDone = orderRepositoryRead }
+                    }
+                }
+                prepareResult("Подготовка ответа")
             }
             operation("Удалить ордер", CommonCommand.DELETE) {
                 stubs("Обработка стабов") {
@@ -73,6 +98,13 @@ class OrderProcessor {
 
                     finishOrderValidation("Успешное завершение процедуры валидации")
                 }
+                chain {
+                    title = "Логика удаления"
+                    repositoryRead("Read order from db")
+                    repositoryPrepareDelete("Подготовка объекта для удаления")
+                    repositoryDelete("Delete order from db")
+                }
+                prepareResult("Подготовка ответа")
             }
             operation("Поиск ордеров", CommonCommand.SEARCH) {
                 stubs("Обработка стабов") {
@@ -88,6 +120,8 @@ class OrderProcessor {
 
                     finishOrderFilterValidation("Успешное завершение процедуры валидации")
                 }
+                repositorySearch("Search orders in db by filter")
+                prepareResult("Подготовка ответа")
             }
         }.build()
     }

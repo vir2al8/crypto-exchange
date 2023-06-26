@@ -1,7 +1,13 @@
 package com.crypto.controller.v1
 
 import com.crypto.api.v1.models.*
+import com.crypto.common.models.CommonOrder
+import com.crypto.common.repository.DbOrderResponse
+import com.crypto.common.repository.DbOrdersResponse
+import com.crypto.helpers.testSettings
 import com.crypto.module
+import com.crypto.repotest.OrderRepositoryMock
+import com.crypto.stubs.OrderStub
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.client.call.*
@@ -15,10 +21,20 @@ import java.math.BigDecimal
 import kotlin.test.assertEquals
 
 class StubOrderControllerTest {
+    private val stub = OrderStub.get()
+    private val orderId = stub.id
 
     @Test
     fun create() = testApplication {
-        application { module() }
+        val repo = OrderRepositoryMock(
+            invokeCreateOrder = {
+                DbOrderResponse(
+                    isSuccess = true,
+                    data = it.order.copy(id = orderId),
+                )
+            }
+        )
+        application { module(testSettings(repo)) }
         val client = myClient()
         val requestObject = OrderCreateRequest(
             requestId = "123",
@@ -50,7 +66,15 @@ class StubOrderControllerTest {
 
     @Test
     fun read() = testApplication {
-        application { module() }
+        val repo = OrderRepositoryMock(
+            invokeReadOrder = {
+                DbOrderResponse(
+                    isSuccess = true,
+                    data = CommonOrder(id = it.id)
+                )
+            }
+        )
+        application { module(testSettings(repo)) }
         val client = myClient()
         val requestObject = OrderReadRequest(
             requestId = "123",
@@ -77,7 +101,21 @@ class StubOrderControllerTest {
 
     @Test
     fun delete() = testApplication {
-        application { module() }
+        val repo = OrderRepositoryMock(
+            invokeReadOrder = {
+                DbOrderResponse(
+                    isSuccess = true,
+                    data = CommonOrder(id = it.id)
+                )
+            },
+            invokeDeleteOrder = {
+                DbOrderResponse(
+                    isSuccess = true,
+                    data = CommonOrder(id = it.id)
+                )
+            }
+        )
+        application { module(testSettings(repo)) }
         val client = myClient()
         val requestObject = OrderDeleteRequest(
             requestId = "123",
@@ -100,7 +138,20 @@ class StubOrderControllerTest {
 
     @Test
     fun search() = testApplication {
-        application { module() }
+        val repo = OrderRepositoryMock(
+            invokeSearchOrder = {
+                DbOrdersResponse(
+                    isSuccess = true,
+                    data = listOf(
+                        CommonOrder(
+                            status = it.status,
+                            operation = it.operation
+                        )
+                    )
+                )
+            }
+        )
+        application { module(testSettings(repo)) }
         val client = myClient()
         val requestObject = OrderSearchRequest(
             requestId = "123",

@@ -3,13 +3,14 @@ package com.crypto.logic.validation
 import com.crypto.common.CommonContext
 import com.crypto.common.models.*
 import com.crypto.logic.OrderProcessor
-import com.crypto.stubs.OrderStub
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-fun validationTypeCorrect(command: CommonCommand, processor: OrderProcessor) = runBlocking {
+@OptIn(ExperimentalCoroutinesApi::class)
+fun validationTypeCorrect(command: CommonCommand, processor: OrderProcessor) = runTest {
     val ctx = CommonContext(
         command = command,
         state = CommonState.NONE,
@@ -28,7 +29,8 @@ fun validationTypeCorrect(command: CommonCommand, processor: OrderProcessor) = r
     assertNotEquals(CommonState.FAILING, ctx.state)
 }
 
-fun validationTypeNone(command: CommonCommand, processor: OrderProcessor) = runBlocking {
+@OptIn(ExperimentalCoroutinesApi::class)
+fun validationTypeNone(command: CommonCommand, processor: OrderProcessor) = runTest {
     val ctx = CommonContext(
         command = command,
         state = CommonState.NONE,
