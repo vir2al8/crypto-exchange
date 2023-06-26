@@ -3,6 +3,8 @@ package com.crypto.logic.repository
 import com.crypto.common.CommonContext
 import com.crypto.common.CommonSettings
 import com.crypto.common.models.*
+import com.crypto.common.permissions.CommonPrincipalModel
+import com.crypto.common.permissions.CommonUserGroups
 import com.crypto.common.repository.DbOrderResponse
 import com.crypto.logic.OrderProcessor
 import com.crypto.repotest.OrderRepositoryMock
@@ -62,6 +64,13 @@ class OrderRepositoryDeleteTest {
             workMode = CommonWorkMode.TEST,
             orderRequest = CommonOrder(
                 id = CommonOrderId(orderId),
+            ),
+            principal = CommonPrincipalModel(
+                id = CommonWalletId("1011"), // TODO
+                groups = setOf(
+                    CommonUserGroups.USER,
+                    CommonUserGroups.TEST,
+                )
             ),
         )
 

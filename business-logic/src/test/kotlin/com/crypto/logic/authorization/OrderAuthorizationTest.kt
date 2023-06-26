@@ -1,4 +1,4 @@
-package com.crypto.logic.repository
+package com.crypto.logic.authorization
 
 import com.crypto.common.CommonContext
 import com.crypto.common.CommonSettings
@@ -8,7 +8,6 @@ import com.crypto.common.permissions.CommonUserGroups
 import com.crypto.common.repository.DbOrderResponse
 import com.crypto.logic.OrderProcessor
 import com.crypto.repotest.OrderRepositoryMock
-import com.crypto.stubs.OrderStub
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import java.math.BigDecimal
@@ -17,7 +16,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-class OrderRepositoryCreateTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+class OrderAuthorizationTest {
     private val command = CommonCommand.CREATE
     private val orderId = "10000000-0000-0000-0000-000000000001"
     private val createdAt = Instant.parse("2023-03-03T08:05:57Z");
@@ -44,7 +44,7 @@ class OrderRepositoryCreateTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun repositoryCreateSuccessTest() = runTest {
+    fun createSuccessTest() = runTest {
         val context = CommonContext(
             command = command,
             state = CommonState.NONE,
@@ -76,4 +76,5 @@ class OrderRepositoryCreateTest {
         assertEquals(CommonOrderStatus.OPEN, context.orderResponse.status)
         assertEquals(Instant.parse("2023-03-03T08:05:57Z"), context.orderResponse.createdAt)
     }
+
 }

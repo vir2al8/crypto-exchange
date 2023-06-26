@@ -6,13 +6,18 @@ import com.crypto.common.models.CommonCommand
 import com.crypto.common.models.CommonOrderFilter
 import com.crypto.common.models.CommonState
 import com.crypto.common.models.CommonWorkMode
+import com.crypto.common.permissions.CommonPrincipalModel
+import com.crypto.common.permissions.CommonUserGroups
 import com.crypto.logic.OrderProcessor
 import com.crypto.repostub.OrderRepositoryStub
+import com.crypto.stubs.OrderStub
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+
+private val stub = OrderStub.get()
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ValidationSearchTest {
@@ -31,7 +36,14 @@ class ValidationSearchTest {
             command = command,
             state = CommonState.NONE,
             workMode = CommonWorkMode.TEST,
-            orderFilterRequest = CommonOrderFilter()
+            orderFilterRequest = CommonOrderFilter(),
+            principal = CommonPrincipalModel(
+                id = stub.walletId,
+                groups = setOf(
+                    CommonUserGroups.USER,
+                    CommonUserGroups.TEST,
+                )
+            ),
         )
         processor.exec(ctx)
         assertEquals(0, ctx.errors.size)

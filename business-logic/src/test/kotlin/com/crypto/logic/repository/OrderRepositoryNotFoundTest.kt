@@ -3,14 +3,19 @@ package com.crypto.logic.repository
 import com.crypto.common.CommonContext
 import com.crypto.common.CommonSettings
 import com.crypto.common.models.*
+import com.crypto.common.permissions.CommonPrincipalModel
+import com.crypto.common.permissions.CommonUserGroups
 import com.crypto.common.repository.DbOrderResponse
 import com.crypto.logic.OrderProcessor
 import com.crypto.repotest.OrderRepositoryMock
+import com.crypto.stubs.OrderStub
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import java.math.BigDecimal
 import java.time.Instant
 import kotlin.test.assertEquals
+
+private val stub = OrderStub.get()
 
 private val command = CommonCommand.READ
 private val orderId = "10000000-0000-0000-0000-000000000001"
@@ -56,6 +61,13 @@ fun repositoryNotFoundTest(command: CommonCommand) = runTest {
             type = CommonOrderType.MARKET,
             operation = CommonOrderOperation.BUYING,
             status = CommonOrderStatus.OPEN,
+        ),
+        principal = CommonPrincipalModel(
+            id = stub.walletId,
+            groups = setOf(
+                CommonUserGroups.USER,
+                CommonUserGroups.TEST,
+            )
         ),
     )
 

@@ -3,10 +3,12 @@ package com.crypto.logic.repository
 import com.crypto.common.CommonContext
 import com.crypto.common.CommonSettings
 import com.crypto.common.models.*
-import com.crypto.common.repository.DbOrderResponse
+import com.crypto.common.permissions.CommonPrincipalModel
+import com.crypto.common.permissions.CommonUserGroups
 import com.crypto.common.repository.DbOrdersResponse
 import com.crypto.logic.OrderProcessor
 import com.crypto.repotest.OrderRepositoryMock
+import com.crypto.stubs.OrderStub
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import java.math.BigDecimal
@@ -14,6 +16,8 @@ import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+
+private val stub = OrderStub.get()
 
 class OrderRepositorySearchTest {
     private val command = CommonCommand.SEARCH
@@ -53,6 +57,13 @@ class OrderRepositorySearchTest {
                 type = CommonOrderType.LIMIT,
                 operation = CommonOrderOperation.SELLING,
                 status = CommonOrderStatus.CLOSED
+            ),
+            principal = CommonPrincipalModel(
+                id = stub.walletId,
+                groups = setOf(
+                    CommonUserGroups.USER,
+                    CommonUserGroups.TEST,
+                )
             ),
         )
 
