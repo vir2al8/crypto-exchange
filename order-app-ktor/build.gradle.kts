@@ -40,5 +40,9 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":api"))
     implementation(project(":mappers"))
+    implementation(project(":business-logic"))
+    implementation(project(":repository-cassandra"))
     implementation(project(":stubs"))
+    testImplementation(project(":repository-stubs"))
+    testImplementation(project(":repository-tests"))
 }

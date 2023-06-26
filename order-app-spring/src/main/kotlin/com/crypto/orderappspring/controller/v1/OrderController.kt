@@ -3,6 +3,7 @@ package com.crypto.orderappspring.controller.v1
 import com.crypto.api.v1.models.*
 import com.crypto.common.CommonContext
 import com.crypto.mappers.*
+import com.crypto.orderappspring.service.OrderBlockingProcessor
 import com.crypto.stubs.OrderStub
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -11,13 +12,15 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("api/v1/order")
-class OrderController {
+class OrderController(
+    private val processor: OrderBlockingProcessor
+) {
 
     @PostMapping("create")
     fun createOrder(@RequestBody request: OrderCreateRequest): OrderCreateResponse {
         val context = CommonContext()
         context.fromTransport(request)
-        context.orderResponse = OrderStub.get()
+        processor.exec(context)
         return context.toTransportCreate()
     }
 
@@ -25,7 +28,7 @@ class OrderController {
     fun readOrder(@RequestBody request: OrderReadRequest): OrderReadResponse {
         val context = CommonContext()
         context.fromTransport(request)
-        context.orderResponse = OrderStub.get()
+        processor.exec(context)
         return context.toTransportRead()
     }
 
@@ -33,6 +36,7 @@ class OrderController {
     fun deleteOrder(@RequestBody request: OrderDeleteRequest): OrderDeleteResponse {
         val context = CommonContext()
         context.fromTransport(request)
+        processor.exec(context)
         return context.toTransportDelete()
     }
 
@@ -40,7 +44,7 @@ class OrderController {
     fun searchOrder(@RequestBody request: OrderSearchRequest): OrderSearchResponse {
         val context = CommonContext()
         context.fromTransport(request)
-        context.ordersResponse.add(OrderStub.get())
+        processor.exec(context)
         return context.toTransportSearch()
     }
 }

@@ -2,8 +2,8 @@ package com.crypto
 
 import com.crypto.api.apiObjectMapper
 import com.crypto.api.v1.models.*
-import com.crypto.config.RabbitConfig
-import com.crypto.config.RabbitExchangeConfiguration
+import com.crypto.configs.RabbitConfig
+import com.crypto.configs.RabbitExchangeConfiguration
 import com.crypto.controller.OrderController
 import com.crypto.processor.RabbitDirectProcessor
 import com.crypto.stubs.OrderStub

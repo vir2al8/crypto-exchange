@@ -5,8 +5,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import com.crypto.config.RabbitConfig
-import com.crypto.config.RabbitExchangeConfiguration
+import com.crypto.configs.RabbitConfig
+import com.crypto.configs.RabbitExchangeConfiguration
 import kotlin.coroutines.CoroutineContext
 
 /**

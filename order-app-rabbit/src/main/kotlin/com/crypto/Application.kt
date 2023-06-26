@@ -1,7 +1,7 @@
 package com.crypto
 
-import com.crypto.config.RabbitConfig
-import com.crypto.config.RabbitExchangeConfiguration
+import com.crypto.configs.RabbitConfig
+import com.crypto.configs.RabbitExchangeConfiguration
 import com.crypto.controller.OrderController
 import com.crypto.processor.CommonOrderProcessor
 import com.crypto.processor.RabbitDirectProcessor
