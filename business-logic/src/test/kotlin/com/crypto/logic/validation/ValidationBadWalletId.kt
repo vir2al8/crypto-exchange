@@ -2,12 +2,17 @@ package com.crypto.logic.validation
 
 import com.crypto.common.CommonContext
 import com.crypto.common.models.*
+import com.crypto.common.permissions.CommonPrincipalModel
+import com.crypto.common.permissions.CommonUserGroups
 import com.crypto.logic.OrderProcessor
+import com.crypto.stubs.OrderStub
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+
+private val stub = OrderStub.get()
 
 @OptIn(ExperimentalCoroutinesApi::class)
 fun validationWalletIdCorrect(command: CommonCommand, processor: OrderProcessor) = runTest {
@@ -20,6 +25,13 @@ fun validationWalletIdCorrect(command: CommonCommand, processor: OrderProcessor)
             walletId = CommonWalletId("123-234-abc-ABC"),
             type = CommonOrderType.LIMIT,
             operation = CommonOrderOperation.BUYING,
+        ),
+        principal = CommonPrincipalModel(
+            id = stub.walletId,
+            groups = setOf(
+                CommonUserGroups.USER,
+                CommonUserGroups.TEST,
+            )
         ),
     )
 
@@ -40,6 +52,13 @@ fun validationWalletIdTrim(command: CommonCommand, processor: OrderProcessor) = 
             walletId = CommonWalletId(" \n\t 123-234-abc-ABC \n\t "),
             type = CommonOrderType.LIMIT,
             operation = CommonOrderOperation.BUYING,
+        ),
+        principal = CommonPrincipalModel(
+            id = stub.walletId,
+            groups = setOf(
+                CommonUserGroups.USER,
+                CommonUserGroups.TEST,
+            )
         ),
     )
 

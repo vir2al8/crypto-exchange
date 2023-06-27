@@ -6,6 +6,10 @@ val kotlinVersion: String by project
 
 fun ktor(module: String, prefix: String = "server-", version: String? = this@Build_gradle.ktorVersion): Any =
     "io.ktor:ktor-${prefix.suffixIfNot("-")}$module:$version"
+fun ktorServer(module: String, version: String? = this@Build_gradle.ktorVersion): Any =
+    "io.ktor:ktor-server-$module:$version"
+fun ktorClient(module: String, version: String? = this@Build_gradle.ktorVersion): Any =
+    "io.ktor:ktor-client-$module:$version"
 
 plugins {
     kotlin("jvm")
@@ -22,20 +26,22 @@ repositories {
 
 
 dependencies {
-    implementation(ktor("core"))
-    implementation(ktor("netty"))
+    implementation(ktorServer("core"))
+    implementation(ktorServer("netty"))
 
-    implementation(ktor("content-negotiation"))
+    implementation(ktorServer("content-negotiation"))
     implementation(ktor("jackson", "serialization"))
     implementation(ktor("kotlinx-json", "serialization")) // TODO ???
 
-    implementation(ktor("call-logging"))
+    implementation(ktorServer("call-logging"))
 
-    testImplementation(ktor("test-host"))
-    testImplementation(ktor("content-negotiation", prefix = "client-"))
+    testImplementation(ktorServer("test-host"))
+    testImplementation(ktorClient("content-negotiation"))
     testImplementation(kotlin("test-junit"))
 
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
+
+    implementation(ktorServer("auth-jwt"))
 
     implementation(project(":common"))
     implementation(project(":api"))

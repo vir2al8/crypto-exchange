@@ -1,9 +1,12 @@
 package com.crypto.controller.v1
 
 import com.crypto.api.v1.models.*
+import com.crypto.authorization.addAuthorization
 import com.crypto.common.models.CommonOrder
+import com.crypto.common.permissions.CommonUserGroups
 import com.crypto.common.repository.DbOrderResponse
 import com.crypto.common.repository.DbOrdersResponse
+import com.crypto.configs.KtorAuthConfig
 import com.crypto.helpers.testSettings
 import com.crypto.module
 import com.crypto.repotest.OrderRepositoryMock
@@ -52,6 +55,7 @@ class StubOrderControllerTest {
 
         val response = client.post("/api/v1/order/create") {
             contentType(ContentType.Application.Json)
+            addAuthorization(id = "wallet-1", config = KtorAuthConfig.TEST, groups = listOf(CommonUserGroups.TEST.name))
             setBody(requestObject)
         }
 
@@ -87,6 +91,7 @@ class StubOrderControllerTest {
 
         val response = client.post("/api/v1/order/read") {
             contentType(ContentType.Application.Json)
+            addAuthorization(id = "wallet-1", config = KtorAuthConfig.TEST, groups = listOf(CommonUserGroups.TEST.name))
             setBody(requestObject)
         }
 
@@ -128,6 +133,7 @@ class StubOrderControllerTest {
 
         val response = client.post("/api/v1/order/delete") {
             contentType(ContentType.Application.Json)
+            addAuthorization(id = "wallet-1", config = KtorAuthConfig.TEST, groups = listOf(CommonUserGroups.TEST.name))
             setBody(requestObject)
         }
 
@@ -167,6 +173,7 @@ class StubOrderControllerTest {
 
         val response = client.post("/api/v1/order/search") {
             contentType(ContentType.Application.Json)
+            addAuthorization(id = "wallet-1", config = KtorAuthConfig.TEST, groups = listOf(CommonUserGroups.TEST.name))
             setBody(requestObject)
         }
 

@@ -11,6 +11,7 @@ fun CorChainDsl<CommonContext>.repositoryPrepareCreate(title: String) = worker {
     on { state == CommonState.RUNNING }
     handle {
         orderRepositoryRead = orderValidated.deepCopy()
+        orderRepositoryRead.walletId = principal.id // TODO
         orderRepositoryPrepare = orderRepositoryRead
     }
 }

@@ -6,6 +6,7 @@ import com.crypto.controller.v1.deleteOrder
 import com.crypto.controller.v1.readOrder
 import com.crypto.controller.v1.searchOrder
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.http.content.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -15,11 +16,11 @@ fun Application.configureRouting(appConfigs: OrderAppConfigs) {
         get("/") {
             call.respondText("Hello World!")
         }
-
-        route("api/v1") {
-            v1Order(appConfigs)
+        authenticate("auth-jwt") {
+            route("api/v1") {
+                v1Order(appConfigs)
+            }
         }
-
         static("static") {
             resources("static")
         }

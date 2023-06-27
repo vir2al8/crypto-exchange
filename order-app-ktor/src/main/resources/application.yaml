@@ -17,3 +17,10 @@ crypto:
       keyspace: test_keyspace
       username: cassandra
       password: cassandra
+
+jwt:
+  issuer: "http://localhost:8081/auth/realms/crypto-exchange"
+  audience: "order-user"
+  realm: "crypto-exchange-realm"
+  clientId: "crypto-exchange-order"
+  certUrl: "http://localhost:8081/auth/realms/crypto-exchange/protocol/openid-connect/certs" # TODO()

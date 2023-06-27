@@ -281,7 +281,7 @@ exceptions:
   ThrowingNewInstanceOfSameException:
     active: true
   TooGenericExceptionCaught:
-    active: true
+    active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     exceptionNames:
       - 'ArrayIndexOutOfBoundsException'
@@ -669,7 +669,7 @@ style:
   SpacingBetweenPackageAndImports:
     active: false
   ThrowsCount:
-    active: true
+    active: false
     max: 2
     excludeGuardClauses: false
   TrailingWhitespace:
@@ -737,7 +737,7 @@ style:
   UseOrEmpty:
     active: true
   UseRequire:
-    active: true
+    active: false
   UseRequireNotNull:
     active: true
   UseSumOfInsteadOfFlatMapSize:

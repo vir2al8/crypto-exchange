@@ -1,6 +1,8 @@
 package com.crypto.common
 
 import com.crypto.common.models.*
+import com.crypto.common.permissions.CommonPrincipalModel
+import com.crypto.common.permissions.CommonUserPermissions
 import com.crypto.common.repository.OrderRepository
 import com.crypto.common.stubs.CommonStub
 import java.time.Instant
@@ -13,6 +15,10 @@ data class CommonContext(
 
     var workMode: CommonWorkMode = CommonWorkMode.PROD,
     var stubCase: CommonStub = CommonStub.NONE,
+
+    var principal: CommonPrincipalModel = CommonPrincipalModel.NONE,
+    val permissionsChain: MutableSet<CommonUserPermissions> = mutableSetOf(),
+    var permitted: Boolean = false,
 
     var orderRepository: OrderRepository = OrderRepository.NONE,
     var orderRepositoryRead: CommonOrder = CommonOrder(),

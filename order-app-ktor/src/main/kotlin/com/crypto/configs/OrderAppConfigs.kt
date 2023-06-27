@@ -8,4 +8,5 @@ data class OrderAppConfigs(
     val appUrls: List<String> = emptyList(),
     val corSettings: CommonSettings,
     val processor: OrderProcessor = OrderProcessor(),
+    val authorization: KtorAuthConfig = KtorAuthConfig.NONE,
 )

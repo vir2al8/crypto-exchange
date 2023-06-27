@@ -10,6 +10,9 @@ import com.crypto.cor.chain
 import com.crypto.cor.rootChain
 import com.crypto.cor.worker
 import com.crypto.logic.groups.operation
+import com.crypto.logic.permissions.accessValidation
+import com.crypto.logic.permissions.chainPermissions
+import com.crypto.logic.permissions.frontPermissions
 import com.crypto.logic.repository.*
 import com.crypto.logic.validation.*
 import com.crypto.logic.workers.initRepository
@@ -50,11 +53,14 @@ class OrderProcessor(
 
                     finishOrderValidation("Завершение проверок")
                 }
+                chainPermissions("Вычисление разрешений для пользователя")
                 chain {
                     title = "Логика сохранения"
                     repositoryPrepareCreate("Подготовка объекта для сохранения")
+                    accessValidation("Вычисление прав доступа")
                     repositoryCreate("Создание order in db")
                 }
+                frontPermissions("Вычисление пользовательских разрешений для фронтенда")
                 prepareResult("Подготовка ответа")
             }
             operation("Получить ордер", CommonCommand.READ) {
@@ -72,15 +78,18 @@ class OrderProcessor(
 
                     finishOrderValidation("Успешное завершение процедуры валидации")
                 }
+                chainPermissions("Вычисление разрешений для пользователя")
                 chain {
                     title = "Логика чтения"
                     repositoryRead("Read order from db")
+                    accessValidation("Вычисление прав доступа")
                     worker {
                         title = "Подготовка ответа для Read"
                         on { state == CommonState.RUNNING }
                         handle { orderRepositoryDone = orderRepositoryRead }
                     }
                 }
+                frontPermissions("Вычисление пользовательских разрешений для фронтенда")
                 prepareResult("Подготовка ответа")
             }
             operation("Удалить ордер", CommonCommand.DELETE) {
@@ -98,12 +107,15 @@ class OrderProcessor(
 
                     finishOrderValidation("Успешное завершение процедуры валидации")
                 }
+                chainPermissions("Вычисление разрешений для пользователя")
                 chain {
                     title = "Логика удаления"
                     repositoryRead("Read order from db")
+                    accessValidation("Вычисление прав доступа")
                     repositoryPrepareDelete("Подготовка объекта для удаления")
                     repositoryDelete("Delete order from db")
                 }
+                frontPermissions("Вычисление пользовательских разрешений для фронтенда")
                 prepareResult("Подготовка ответа")
             }
             operation("Поиск ордеров", CommonCommand.SEARCH) {
@@ -120,7 +132,10 @@ class OrderProcessor(
 
                     finishOrderFilterValidation("Успешное завершение процедуры валидации")
                 }
+                chainPermissions("Вычисление разрешений для пользователя")
                 repositorySearch("Search orders in db by filter")
+                accessValidation("Вычисление прав доступа")
+                frontPermissions("Вычисление пользовательских разрешений для фронтенда")
                 prepareResult("Подготовка ответа")
             }
         }.build()

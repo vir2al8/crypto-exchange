@@ -2,12 +2,17 @@ package com.crypto.logic.validation
 
 import com.crypto.common.CommonContext
 import com.crypto.common.models.*
+import com.crypto.common.permissions.CommonPrincipalModel
+import com.crypto.common.permissions.CommonUserGroups
 import com.crypto.logic.OrderProcessor
+import com.crypto.stubs.OrderStub
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+
+private val stub = OrderStub.get()
 
 @OptIn(ExperimentalCoroutinesApi::class)
 fun validationIdCorrect(command: CommonCommand, processor: OrderProcessor) = runTest {
@@ -19,6 +24,13 @@ fun validationIdCorrect(command: CommonCommand, processor: OrderProcessor) = run
             id = CommonOrderId("123-234-abc-ABC"),
             type = CommonOrderType.LIMIT,
             operation = CommonOrderOperation.BUYING,
+        ),
+        principal = CommonPrincipalModel(
+            id = stub.walletId,
+            groups = setOf(
+                CommonUserGroups.USER,
+                CommonUserGroups.TEST,
+            )
         ),
     )
 
@@ -39,6 +51,13 @@ fun validationIdTrim(command: CommonCommand, processor: OrderProcessor) = runTes
             type = CommonOrderType.LIMIT,
             operation = CommonOrderOperation.BUYING,
         ),
+        principal = CommonPrincipalModel(
+            id = stub.walletId,
+            groups = setOf(
+                CommonUserGroups.USER,
+                CommonUserGroups.TEST,
+            )
+        ),
     )
 
     processor.exec(ctx)
@@ -57,6 +76,13 @@ fun validationIdEmpty(command: CommonCommand, processor: OrderProcessor) = runTe
             id = CommonOrderId(""),
             type = CommonOrderType.LIMIT,
             operation = CommonOrderOperation.BUYING,
+        ),
+        principal = CommonPrincipalModel(
+            id = stub.walletId,
+            groups = setOf(
+                CommonUserGroups.USER,
+                CommonUserGroups.TEST,
+            )
         ),
     )
 
@@ -79,6 +105,13 @@ fun validationIdFormat(command: CommonCommand, processor: OrderProcessor) = runT
             id = CommonOrderId("!@#\$%^&*(),.{}"),
             type = CommonOrderType.LIMIT,
             operation = CommonOrderOperation.BUYING,
+        ),
+        principal = CommonPrincipalModel(
+            id = stub.walletId,
+            groups = setOf(
+                CommonUserGroups.USER,
+                CommonUserGroups.TEST,
+            )
         ),
     )
 
