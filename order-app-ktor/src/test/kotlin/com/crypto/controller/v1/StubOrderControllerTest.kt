@@ -37,7 +37,7 @@ class StubOrderControllerTest {
                 )
             }
         )
-        application { module(testSettings(repo)) }
+//        application { module(testSettings(repo)) }
         val client = myClient()
         val requestObject = OrderCreateRequest(
             requestId = "123",
@@ -78,7 +78,7 @@ class StubOrderControllerTest {
                 )
             }
         )
-        application { module(testSettings(repo)) }
+//        application { module(testSettings(repo)) }
         val client = myClient()
         val requestObject = OrderReadRequest(
             requestId = "123",
@@ -120,7 +120,7 @@ class StubOrderControllerTest {
                 )
             }
         )
-        application { module(testSettings(repo)) }
+//        application { module(testSettings(repo)) }
         val client = myClient()
         val requestObject = OrderDeleteRequest(
             requestId = "123",
@@ -157,7 +157,7 @@ class StubOrderControllerTest {
                 )
             }
         )
-        application { module(testSettings(repo)) }
+//        application { module(testSettings(repo)) }
         val client = myClient()
         val requestObject = OrderSearchRequest(
             requestId = "123",

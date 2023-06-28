@@ -11,8 +11,7 @@ import kotlin.test.assertEquals
 class AuthorizationTest {
     @Test
     fun invalidAudience() = testApplication {
-        application { module(testSettings()) }
-
+//        application { module(testSettings()) }
 
         val response = client.post("api/v1/order/create") {
             addAuthorization(id = "test", config = KtorAuthConfig.TEST.copy(audience = "invalid"), groups = listOf())

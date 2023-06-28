@@ -7,6 +7,6 @@ import com.crypto.logic.OrderProcessor
 data class OrderAppConfigs(
     val appUrls: List<String> = emptyList(),
     val corSettings: CommonSettings,
-    val processor: OrderProcessor = OrderProcessor(),
+    val processor: OrderProcessor = OrderProcessor(settings = corSettings),
     val authorization: KtorAuthConfig = KtorAuthConfig.NONE,
 )

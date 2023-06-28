@@ -3,7 +3,7 @@ ktor:
     modules:
       - com.crypto.ApplicationKt.module
   deployment:
-    port: 7102
+    port: 7101
   watch:
     - classes
     - resources
@@ -12,14 +12,15 @@ crypto:
     test: "cassandra"
     prod: "cassandra"
     cassandra:
-      hosts: localhost
+      host: cassandra
       port: 9042
       keyspace: test_keyspace
       username: cassandra
       password: cassandra
 
 jwt:
-  issuer: "http://localhost:8081/auth/realms/crypto-exchange"
+#  issuer: "http://localhost:8081/auth/realms/crypto-exchange"
+  issuer: "crypto-exchange"
   audience: "order-user"
   realm: "crypto-exchange-realm"
   clientId: "crypto-exchange-order"

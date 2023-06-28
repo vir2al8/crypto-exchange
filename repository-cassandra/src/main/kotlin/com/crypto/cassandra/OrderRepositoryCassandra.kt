@@ -8,6 +8,7 @@ import com.crypto.common.helpers.asCommonError
 import com.crypto.common.models.CommonError
 import com.crypto.common.models.CommonOrder
 import com.crypto.common.models.CommonOrderId
+import com.crypto.common.models.CommonOrderStatus
 import com.crypto.common.repository.*
 import com.datastax.oss.driver.api.core.CqlSession
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilder
@@ -19,6 +20,7 @@ import kotlinx.coroutines.withTimeout
 import org.slf4j.LoggerFactory
 import java.net.InetAddress
 import java.net.InetSocketAddress
+import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.CompletionStage
 import kotlin.time.Duration
@@ -83,8 +85,8 @@ class OrderRepositoryCassandra(
         }
     }
 
-    private fun errorToAdResponse(e: Exception) = DbOrderResponse.error(e.asCommonError())
-    private fun errorToAdsResponse(e: Exception) = DbOrdersResponse.error(e.asCommonError())
+    private fun errorToOrderResponse(e: Exception) = DbOrderResponse.error(e.asCommonError())
+    private fun errorToOrdersResponse(e: Exception) = DbOrdersResponse.error(e.asCommonError())
 
     private suspend inline fun <DbRes, Response> doDbAction(
         name: String,
@@ -140,12 +142,13 @@ class OrderRepositoryCassandra(
         }
 
     override suspend fun createOrder(rq: DbOrderRequest): DbOrderResponse {
-        val new = rq.order.copy(id = CommonOrderId(randomUuid()))
+        val createdAt = Instant.now()
+        val new = rq.order.copy(id = CommonOrderId(randomUuid()), createdAt = createdAt, updatedAt = createdAt, status = CommonOrderStatus.OPEN)
         return doDbAction(
             "create",
             { dao.create(OrderCassandraDto(new)) },
             { DbOrderResponse.success(new) },
-            ::errorToAdResponse
+            ::errorToOrderResponse
         )
     }
 
@@ -159,7 +162,7 @@ class OrderRepositoryCassandra(
                 if (found != null) DbOrderResponse.success(found.toOrderModel())
                 else ID_NOT_FOUND
             },
-            ::errorToAdResponse
+            ::errorToOrderResponse
         )
 
     override suspend fun deleteOrder(rq: DbOrderIdRequest): DbOrderResponse =
@@ -168,7 +171,7 @@ class OrderRepositoryCassandra(
             rq.id,
             null,
             { dao.delete(rq.id.asString()) },
-            ::errorToAdResponse
+            ::errorToOrderResponse
         )
 
     override suspend fun searchOrder(rq: DbOrderFilterRequest): DbOrdersResponse =
@@ -178,7 +181,7 @@ class OrderRepositoryCassandra(
             { found ->
                 DbOrdersResponse.success(found.map { it.toOrderModel() })
             },
-            ::errorToAdsResponse
+            ::errorToOrdersResponse
         )
 
     companion object {

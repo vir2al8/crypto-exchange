@@ -28,6 +28,7 @@ repositories {
 dependencies {
     implementation(ktorServer("core"))
     implementation(ktorServer("netty"))
+    implementation(ktorServer("config-yaml"))
 
     implementation(ktorServer("content-negotiation"))
     implementation(ktor("jackson", "serialization"))
@@ -48,6 +49,7 @@ dependencies {
     implementation(project(":mappers"))
     implementation(project(":business-logic"))
     implementation(project(":repository-cassandra"))
+    implementation(project(":repository-stubs"))
     implementation(project(":stubs"))
     testImplementation(project(":repository-stubs"))
     testImplementation(project(":repository-tests"))

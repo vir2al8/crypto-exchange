@@ -15,6 +15,7 @@ fun CorChainDsl<CommonContext>.initRepository(title: String) = worker {
         orderRepository = when (workMode) {
             CommonWorkMode.TEST -> settings.repositoryTest
             CommonWorkMode.STUB -> settings.repositoryStub
+            CommonWorkMode.PROD -> settings.repositoryProd
             else -> settings.repositoryProd
         }
         if (workMode != CommonWorkMode.STUB && orderRepository == OrderRepository.NONE) fail(

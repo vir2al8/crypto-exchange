@@ -13,6 +13,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import java.net.URL
 import java.security.interfaces.RSAPublicKey
+import kotlin.math.log
 
 fun Application.configureAuthorization(appConfigs: OrderAppConfigs) {
     install(Authentication) {
@@ -21,7 +22,7 @@ fun Application.configureAuthorization(appConfigs: OrderAppConfigs) {
             realm = authorizationConfig.realm
 
             verifier {
-                val algorithm = it.resolveAlgorithm(authorizationConfig)
+//                val algorithm = it.resolveAlgorithm(authorizationConfig)
 //                JWT.require(algorithm) // TODO
                 JWT.require(Algorithm.none())
                     .withAudience(authorizationConfig.audience)
@@ -31,6 +32,8 @@ fun Application.configureAuthorization(appConfigs: OrderAppConfigs) {
             validate { jwtCredential: JWTCredential ->
                 when {
                     jwtCredential.payload.getClaim(GROUPS_CLAIM).asList(String::class.java).isNullOrEmpty() -> {
+//                        log.error("Groups claim must not be empty in JWT token")
+                        println("Groups claim must not be empty in JWT token")
                         null
                     }
                     else -> JWTPrincipal(jwtCredential.payload)

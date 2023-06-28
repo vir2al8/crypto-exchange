@@ -15,28 +15,28 @@ fun CommonContext.toTransport(): IResponse = when (command) {
 
 fun CommonContext.toTransportCreate() = OrderCreateResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == CommonState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == CommonState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     order = orderResponse.toTransportOrder(),
 )
 
 fun CommonContext.toTransportRead() = OrderReadResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == CommonState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == CommonState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     order = orderResponse.toTransportOrder(),
 )
 
 fun CommonContext.toTransportDelete() = OrderDeleteResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == CommonState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == CommonState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     order = orderResponse.toTransportOrder(),
 )
 
 fun CommonContext.toTransportSearch() = OrderSearchResponse(
     requestId = requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == CommonState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == CommonState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     orders = ordersResponse.toTransportOrders()
 )
